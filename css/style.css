@@ -1,0 +1,524 @@
+/* ============================================================
+   花木兰 — The Legend of Hua Mulan
+   UX: mirrors jade-rabbit exactly
+   Theme: Northern Wei Dynasty · Classical Chinese Ink Painting
+   ============================================================ */
+
+/* ─── CSS Variables ─────────────────────────────────────────── */
+:root {
+  /* Ink-painting palette */
+  --paper:       #f0e8d5;
+  --paper-dark:  #d8cba8;
+  --ink:         #1c1714;
+  --ink-soft:    #3c3c2e;
+  --ink-mist:    #8c8279;
+  --ink-faint:   rgba(28,23,20,0.10);
+  --ochre:       #b56b1a;
+  --ochre-glow:  rgba(181,107,26,0.25);
+  --indigo:      #2d3e6b;
+  --indigo-glow: rgba(45,62,107,0.20);
+  --cinnabar:    #8b2e2e;
+  --cinnabar-light: rgba(139,46,46,0.12);
+
+  /* Semantic */
+  --bg: var(--paper);
+  --text: var(--ink);
+  --text-light: var(--ink-soft);
+  --text-mist: var(--ink-mist);
+  --shadow: rgba(28,23,20,0.06);
+  --shadow-strong: rgba(28,23,20,0.12);
+
+  /* Typography */
+  --font-en: 'EB Garamond', 'Crimson Pro', Georgia, serif;
+  --font-zh: 'Noto Serif SC', 'Songti SC', serif;
+  --font-zh-brush: 'Ma Shan Zheng', 'ZCOOL XiaoWei', cursive;
+  --font-ui: 'Inter', -apple-system, system-ui, sans-serif;
+
+  /* Sizing */
+  --max-w: 780px;
+  --header-h: 72px;
+  --moondial-h: 96px;
+  --radius: 4px;
+  --radius-lg: 8px;
+
+  /* Transitions */
+  --ease-out: cubic-bezier(0.19,1,0.22,1);
+  --ease-water: cubic-bezier(0.65,0,0.35,1);
+  --dur-fast: 0.28s;
+  --dur-med: 0.6s;
+  --dur-slow: 1.4s;
+}
+
+/* ─── Reset ──────────────────────────────────────────────────── */
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { font-size:16px; scroll-behavior:smooth; -webkit-font-smoothing:antialiased; }
+body {
+  font-family: var(--font-ui);
+  color: var(--text);
+  background: var(--bg);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.7;
+  position: relative;
+}
+img { display:block; max-width:100%; height:auto; }
+button { cursor:pointer; border:none; background:none; font:inherit; color:inherit; }
+a { color: var(--cinnabar); text-decoration:none; }
+a:hover { text-decoration:underline; }
+
+/* ============================================================
+   ATMOSPHERE — Paper glow + ink-motes
+   ============================================================ */
+.paper-glow {
+  position: fixed; top: -15%; left: -10%;
+  width: 70vmax; height: 70vmax;
+  pointer-events: none; z-index: 0;
+  background: radial-gradient(circle at 50% 50%, var(--ochre-glow) 0%, var(--indigo-glow) 18%, rgba(45,62,107,0.06) 35%, transparent 60%);
+  animation: paperPulse 8s ease-in-out infinite alternate;
+}
+@keyframes paperPulse {
+  0%   { opacity: 0.5; transform: scale(1); }
+  100% { opacity: 0.9; transform: scale(1.04); }
+}
+/* Paper texture */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+.ink-motes { position: fixed; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
+
+/* ============================================================
+   HERO — Title screen
+   ============================================================ */
+.hero {
+  position: relative; z-index: 10;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  min-height: 100vh; padding: 2rem;
+  text-align: center; overflow: hidden;
+}
+.hero__seal {
+  width: 54px; height: 54px;
+  background: var(--cinnabar); color: var(--paper);
+  font-family: var(--font-zh-brush); font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; margin: 0 auto 0.8rem;
+  box-shadow: 0 2px 12px rgba(139,46,46,0.30);
+  animation: sealAppear 0.5s var(--ease-out) 1.6s both;
+  letter-spacing: 0.1em;
+}
+@keyframes sealAppear {
+  0%   { opacity: 0; transform: scale(0.2); }
+  70%  { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.hero__title-zh {
+  font-family: var(--font-zh-brush);
+  font-size: clamp(2.6rem, 8vw, 4rem);
+  color: var(--ink); line-height: 1.15;
+  margin-bottom: 0.1em; letter-spacing: 0.08em;
+  opacity: 0; animation: heroFade 1.4s var(--ease-out) 0.8s forwards;
+}
+.hero__title-en {
+  font-family: var(--font-en);
+  font-size: clamp(1.1rem, 3.5vw, 1.7rem);
+  color: var(--ink-soft); font-weight: 400; font-style: italic;
+  margin-bottom: 0.2em;
+  opacity: 0; animation: heroFade 1.4s var(--ease-out) 1.0s forwards;
+}
+.hero__pinyin {
+  font-family: var(--font-ui); font-size: 0.85rem;
+  color: var(--ink-mist); letter-spacing: 0.12em;
+  margin-bottom: 2rem;
+  opacity: 0; animation: heroFade 1.4s var(--ease-out) 1.2s forwards;
+}
+.hero__cta {
+  display: inline-flex; align-items: center; gap: 0.7em;
+  padding: 0.7em 2.2em;
+  border: 1.5px solid var(--cinnabar); border-radius: var(--radius-lg);
+  color: var(--cinnabar); font-family: var(--font-zh-brush);
+  font-size: 1.1rem; letter-spacing: 0.12em;
+  transition: all var(--dur-fast) ease; background: transparent;
+  opacity: 0; animation: heroFade 1.4s var(--ease-out) 1.6s forwards;
+}
+.hero__cta:hover { background: var(--cinnabar); color: var(--paper); }
+.hero__cta-sub {
+  font-family: var(--font-en); font-size: 0.7rem;
+  font-style: italic; letter-spacing: 0.04em; opacity: 0.7;
+}
+@keyframes heroFade {
+  0%   { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   HEADER BAR — Fixed top strip
+   ============================================================ */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  height: var(--header-h);
+  background: linear-gradient(180deg, var(--paper) 85%, rgba(240,232,213,0));
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: center;
+  padding: 0 clamp(0.8rem,3vw,2rem);
+  border-bottom: 1px solid var(--ink-faint);
+}
+.header__inner {
+  width: 100%; max-width: var(--max-w); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 0.6rem;
+}
+.header__brand { display: flex; align-items: center; gap: 0.45em; flex-shrink: 0; }
+.header__seal {
+  width: 28px; height: 28px;
+  background: var(--cinnabar); color: var(--paper);
+  font-family: var(--font-zh-brush); font-size: 0.55rem;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; letter-spacing: 0.08em;
+}
+.header__title {
+  font-family: var(--font-zh-brush); font-size: 0.95rem;
+  color: var(--ink); white-space: nowrap;
+}
+
+/* ─── Moon-phase nav tray ───────────────────────────────────── */
+.moon-tray { display: flex; gap: 6px; align-items: center; }
+.moon-chip {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--paper-dark); border: 1.5px solid var(--ink-faint);
+  position: relative; transition: all var(--dur-fast) ease;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.moon-chip::before {
+  content: ''; position: absolute;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--ochre); opacity: 0.15;
+  transition: all var(--dur-fast) ease;
+}
+.moon-chip.active {
+  border-color: var(--ochre); background: transparent;
+  box-shadow: 0 0 12px var(--ochre-glow); transform: scale(1.2);
+}
+.moon-chip.active::before {
+  width: 16px; height: 16px;
+  background: var(--ochre); opacity: 0.9;
+  box-shadow: 0 0 8px var(--ochre-glow);
+}
+.moon-chip.visited { border-color: var(--ochre); }
+.moon-chip.visited::before { width: 14px; height: 14px; background: var(--ochre); opacity: 0.5; }
+
+/* ─── Header controls ───────────────────────────────────────── */
+.controls { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
+.lang-toggle {
+  display: flex;
+  border: 1px solid var(--ink-faint); border-radius: var(--radius); overflow: hidden;
+}
+.lang-btn {
+  padding: 0.3em 0.75em; font-family: var(--font-ui);
+  font-size: 0.72rem; font-weight: 500; letter-spacing: 0.04em;
+  color: var(--text-mist); transition: all var(--dur-fast) ease;
+  border-right: 1px solid var(--ink-faint);
+}
+.lang-btn:last-child { border-right: none; }
+.lang-btn.active { background: var(--ink); color: var(--paper); }
+
+.autoplay-btn {
+  display: flex; align-items: center; gap: 0.3em;
+  padding: 0.3em 0.6em;
+  border: 1px solid var(--ink-faint); border-radius: var(--radius);
+  font-size: 0.68rem; font-weight: 500; letter-spacing: 0.04em;
+  color: var(--text-mist); transition: all var(--dur-fast) ease;
+}
+.autoplay-btn svg { width: 14px; height: 14px; }
+.autoplay-btn.active {
+  border-color: var(--cinnabar); color: var(--cinnabar);
+  background: var(--cinnabar-light);
+}
+
+/* ============================================================
+   MOON PHASE PROGRESS BAR
+   ============================================================ */
+.moon-progress {
+  position: fixed; top: var(--header-h); left: 0; right: 0; z-index: 90;
+  height: 5px; background: var(--paper-dark);
+  border-bottom: 1px solid var(--ink-faint);
+}
+.moon-progress__bar {
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, var(--ochre) 0%, var(--ochre) var(--pct, 0%), transparent var(--pct, 0%));
+  transition: width 0.4s var(--ease-water);
+  width: var(--pct, 0%);
+}
+
+/* ============================================================
+   STORY CHAPTERS
+   ============================================================ */
+.story {
+  position: relative; z-index: 10;
+  max-width: var(--max-w); margin: 0 auto;
+  padding: calc(var(--header-h) + 20px) clamp(1rem,4vw,2.5rem) calc(var(--moondial-h) + 2rem);
+}
+.story-chapter { display: none; animation: fadeInUp 0.6s var(--ease-out); }
+.story-chapter.active { display: block; }
+@keyframes fadeInUp {
+  0%   { opacity: 0; transform: translateY(18px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.chapter-badge { margin-bottom: 0.6rem; }
+.chapter-num {
+  font-family: var(--font-ui); font-size: 0.72rem; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-mist);
+}
+
+/* ─── Illustration frame ────────────────────────────────────── */
+.illustration-frame {
+  position: relative;
+  border: 3px solid var(--ink); border-radius: var(--radius);
+  padding: 5px; background: var(--paper-dark);
+  box-shadow: 0 3px 18px var(--shadow);
+  margin-bottom: 1.2rem; overflow: hidden;
+}
+.illustration-frame img {
+  width: 100%; height: auto; display: block; border-radius: 2px;
+  filter: sepia(16%) contrast(90%) brightness(96%);
+}
+.illustration-vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  box-shadow: inset 0 0 50px rgba(28,23,20,0.10); border-radius: 2px;
+}
+.illustration-moonglow {
+  position: absolute; top: 4px; right: 4px;
+  width: 80px; height: 80px; pointer-events: none;
+  background: radial-gradient(circle at center, var(--ochre-glow) 0%, transparent 60%);
+  opacity: 0; border-radius: 50%;
+  transition: opacity 0.6s ease;
+}
+.illustration-moonglow.bloom {
+  opacity: 1; animation: moonglowBloom 1.2s var(--ease-out) forwards;
+}
+@keyframes moonglowBloom {
+  0%   { opacity: 0; transform: scale(0.6); }
+  30%  { opacity: 0.7; transform: scale(1.3); }
+  100% { opacity: 0.3; transform: scale(1); }
+}
+
+/* ─── Chapter titles ─────────────────────────────────────────── */
+.chapter-titles { text-align: center; margin-bottom: 0.8rem; }
+.chapter-title-en {
+  font-family: var(--font-en); font-size: clamp(1.3rem, 4vw, 1.75rem);
+  font-weight: 600; color: var(--ink); line-height: 1.25; margin-bottom: 0.15em;
+}
+.chapter-title-zh {
+  font-family: var(--font-zh-brush); font-size: clamp(1.5rem, 5vw, 2.2rem);
+  color: var(--ink); line-height: 1.2; margin-bottom: 0.1em;
+}
+.chapter-title-pinyin {
+  font-family: var(--font-ui); font-size: 0.78rem;
+  color: var(--ink-mist); letter-spacing: 0.08em;
+}
+
+/* ─── Per-chapter audio controls ─────────────────────────────── */
+.chapter-audio {
+  display: flex; align-items: center; gap: 0.6rem;
+  margin-bottom: 0.8rem; padding: 0 0.2rem;
+}
+.audio-play-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--ink); color: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--dur-fast) ease; flex-shrink: 0;
+}
+.audio-play-btn svg { width: 14px; height: 14px; margin-left: 2px; }
+.audio-play-btn:hover { background: var(--cinnabar); }
+.audio-play-btn.playing { background: var(--cinnabar); }
+
+.audio-progress {
+  flex: 1; height: 3px; background: var(--ink-faint);
+  border-radius: 2px; position: relative; cursor: pointer;
+}
+.audio-progress-fill {
+  height: 100%; width: 0%;
+  background: var(--ochre); border-radius: 2px;
+  transition: width 0.15s linear;
+}
+.audio-time {
+  font-family: var(--font-ui); font-size: 0.65rem;
+  color: var(--text-mist); min-width: 3em; text-align: right;
+}
+
+/* ─── Chapter divider ─────────────────────────────────────────── */
+.chapter-divider {
+  display: flex; align-items: center; justify-content: center;
+  margin: 1.4rem 0; position: relative;
+}
+.chapter-divider__line { flex: 1; height: 1px; background: var(--ink-faint); }
+.chapter-divider__sprig {
+  width: 28px; height: 20px; margin: 0 0.8rem;
+  opacity: 0; transition: opacity var(--dur-med) ease;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+}
+.chapter-divider__sprig.visible { opacity: 1; animation: sprigBloom 0.5s var(--ease-out); }
+@keyframes sprigBloom {
+  0%   { transform: scale(0); opacity: 0; }
+  60%  { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ─── Chapter content — Hanzi + Pinyin grid ───────────────────── */
+.chapter-content { margin-top: 0.4rem; }
+.content-en {
+  font-family: var(--font-en); font-size: clamp(1rem, 2.8vw, 1.18rem);
+  line-height: 1.85; color: var(--ink);
+  margin-bottom: 1.6rem; max-width: 68ch;
+}
+.content-en p { margin-bottom: 0.9em; }
+
+.content-zh-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0 1.4rem; direction: ltr;
+}
+.content-zh-grid .zh-text {
+  font-family: var(--font-zh); font-size: clamp(0.95rem, 2.6vw, 1.08rem);
+  line-height: 2; color: var(--ink); white-space: pre-wrap;
+}
+.content-zh-grid .pinyin-line {
+  font-family: Georgia, 'Noto Serif', serif;
+  font-size: clamp(0.68rem, 1.8vw, 0.76rem);
+  line-height: 2; color: var(--ink-mist); white-space: pre-wrap;
+}
+
+/* ============================================================
+   MOONDIAL — Fixed bottom audio console
+   ============================================================ */
+.moondial {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  height: var(--moondial-h);
+  background: linear-gradient(180deg, rgba(240,232,213,0) 0%, var(--paper) 18%);
+  display: flex; align-items: flex-end; justify-content: center;
+  padding-bottom: 0.6rem; pointer-events: none;
+}
+.moondial__inner {
+  width: min(680px, 90vw); pointer-events: auto;
+  background: var(--paper-dark);
+  border: 1px solid var(--ink-faint); border-radius: 40px;
+  padding: 0.55rem 1.2rem 0.5rem;
+  display: flex; align-items: center; gap: 0.7rem;
+  box-shadow: 0 -2px 14px var(--shadow);
+}
+.moondial__label {
+  font-family: var(--font-ui); font-size: 0.62rem;
+  color: var(--text-mist); white-space: nowrap;
+  min-width: 80px; line-height: 1.3;
+}
+.moondial__label-ch {
+  display: block; font-family: var(--font-zh);
+  font-size: 0.7rem; color: var(--ink-soft);
+}
+.moondial__band {
+  flex: 1; position: relative; height: 32px;
+  background: linear-gradient(90deg, var(--ink-faint) 0%, rgba(181,107,26,0.08) 100%);
+  border-radius: 16px; overflow: visible; cursor: pointer;
+}
+.moondial__band::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(1px 1px at 10% 50%, var(--ochre) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 60%, var(--ochre) 0%, transparent 100%),
+    radial-gradient(1px 1px at 40% 40%, var(--ochre) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 55%, var(--ochre) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 45%, var(--ochre) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 50%, var(--ochre) 0%, transparent 100%);
+  opacity: 0.3; border-radius: 16px; pointer-events: none;
+}
+.moondial__fill {
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, var(--ochre) 0%, var(--ochre) var(--pct, 0%), transparent var(--pct, 0%));
+  border-radius: 16px; opacity: 0.15;
+}
+.moondial__cursor {
+  position: absolute; top: 50%; left: var(--pct, 0%);
+  width: 20px; height: 20px;
+  transform: translate(-50%, -50%); pointer-events: none;
+}
+.moondial__cursor-circle {
+  width: 100%; height: 100%; border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, var(--paper) 0%, var(--ochre) 50%, var(--ink-mist) 100%);
+  box-shadow: 0 0 12px var(--ochre-glow);
+  transition: box-shadow 0.3s ease;
+}
+.moondial__play {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--ink); color: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: background var(--dur-fast) ease;
+}
+.moondial__play svg { width: 16px; height: 16px; margin-left: 2px; }
+.moondial__play:hover { background: var(--cinnabar); }
+.moondial__play.playing { background: var(--cinnabar); }
+
+.moondial__time {
+  font-family: var(--font-ui); font-size: 0.62rem;
+  color: var(--text-mist); min-width: 3.5em; text-align: right;
+}
+.moondial__nav { display: flex; gap: 0.2rem; }
+.moondial__nav button {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-mist); transition: all var(--dur-fast) ease;
+}
+.moondial__nav button:hover { color: var(--ink); background: var(--ink-faint); }
+.moondial__nav button:disabled { opacity: 0.3; pointer-events: none; }
+.moondial__nav svg { width: 14px; height: 14px; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  position: relative; z-index: 10; text-align: center;
+  padding: 2rem 1rem calc(var(--moondial-h) + 2rem);
+  font-size: 0.72rem; color: var(--text-mist); line-height: 1.8;
+}
+.footer a { color: var(--cinnabar); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 640px) {
+  :root { --header-h: 60px; --moondial-h: 84px; }
+  .moon-chip { width: 16px; height: 16px; }
+  .moon-chip.active { transform: scale(1.25); }
+  .content-zh-grid { grid-template-columns: 1fr; gap: 0.8rem 0; }
+  .moondial__inner { gap: 0.45rem; padding: 0.45rem 0.8rem 0.4rem; }
+  .moondial__label { min-width: 60px; font-size: 0.55rem; }
+  .moondial__nav { display: none; }
+  .hero__seal { width: 40px; height: 40px; font-size: 0.85rem; }
+  .hero__moon { width: min(180px, 45vw); }
+  .header__brand .header__title { display: none; }
+}
+@media (max-width: 480px) {
+  .hero__moon { width: min(140px, 40vw); top: 12%; }
+}
+
+/* ============================================================
+   LANGUAGE BLOCK VISIBILITY (data-lang on <html>)
+   ============================================================ */
+[data-lang="en"] .content-zh-grid,
+[data-lang="en"] .chapter-title-zh,
+[data-lang="en"] .chapter-title-pinyin { display: none; }
+[data-lang="zh"] .content-en { display: none; }
+[data-lang="zh"] .chapter-title-en { display: none; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+[hidden] { display: none !important; }
+
+/* Fade transition used on language change */
+.chapter-content, .chapter-titles, .illustration-frame {
+  transition: opacity 0.25s ease;
+}

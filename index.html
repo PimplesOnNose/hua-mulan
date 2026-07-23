@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh" data-lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>花木兰 — The Legend of Hua Mulan</title>
+  <meta name="description" content="A bilingual retelling of the beloved Chinese folktale The Legend of Hua Mulan with classical ink-wash illustrations, narration, and pinyin." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>" />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Atmosphere -->
+  <div class="paper-glow" aria-hidden="true"></div>
+  <div class="ink-motes" id="inkMotesLayer" aria-hidden="true"></div>
+
+  <!-- HERO — Title screen -->
+  <section id="hero" class="hero" aria-label="Title screen">
+    <div class="hero__seal" aria-hidden="true">木兰</div>
+    <h1 class="hero__title-zh">花木兰</h1>
+    <h2 class="hero__title-en">The Legend of Hua Mulan</h2>
+    <p class="hero__pinyin">Huā Mù Lán</p>
+    <button id="begin-btn" class="hero__cta" aria-label="Begin the story">
+      <span class="hero__cta-sub">Enter the Story</span>
+      <span>读 书</span>
+    </button>
+  </section>
+
+  <!-- Fixed header -->
+  <header class="header" id="header" aria-label="Controls">
+    <div class="header__inner">
+      <div class="header__brand">
+        <div class="header__seal" aria-hidden="true">木</div>
+        <span class="header__title">花木兰</span>
+      </div>
+      <!-- Chapter nav tray -->
+      <nav class="moon-tray" id="moonTray" aria-label="Chapter navigation"></nav>
+      <!-- Controls -->
+      <div class="controls">
+        <div class="lang-toggle" role="group" aria-label="Language">
+          <button id="langEn" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+          <button id="langZh" class="lang-btn active" data-lang="zh" aria-pressed="true">中文</button>
+        </div>
+        <button id="autoplayBtn" class="autoplay-btn" title="Toggle auto-play" aria-label="Toggle auto-play">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="10"/>
+            <polygon points="10,8 16,12 10,16" fill="currentColor"/>
+          </svg>
+          <span>AUTO</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Progress bar -->
+  <div class="moon-progress" id="moonProgress" aria-hidden="true">
+    <div class="moon-progress__bar" id="moonBar"></div>
+  </div>
+
+  <!-- Story container -->
+  <main class="story" id="story" aria-label="Story"></main>
+
+  <!-- Fixed bottom audio console -->
+  <div class="moondial" id="moondial">
+    <div class="moondial__inner">
+      <div class="moondial__label">
+        <span class="moondial__label-ch" id="moondialLabelZh">第一章</span>
+        <span id="moondialLabelEn">Ch 1</span>
+      </div>
+      <button class="moondial__play" id="moondialPlay" aria-label="Play / Pause">
+        <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+      </button>
+      <div class="moondial__band" id="moondialBand">
+        <div class="moondial__fill" id="moondialFill"></div>
+        <div class="moondial__cursor" id="moondialCursor">
+          <div class="moondial__cursor-circle"></div>
+        </div>
+      </div>
+      <span class="moondial__time" id="moondialTime">0:00</span>
+      <div class="moondial__nav">
+        <button id="prevBtn" aria-label="Previous chapter">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button id="nextBtn" aria-label="Next chapter">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>《花木兰》· 中国古代民间传说 · 北魏时期</p>
+    <p>A bilingual webbook · <a href="https://pidev" target="_blank" rel="noopener">Pi</a> · <a href="https://platform.stepfun.ai/" target="_blank" rel="noopener">StepFunAI</a></p>
+  </footer>
+
+  <!-- Hidden audio element -->
+  <audio id="audioPlayer" preload="none" style="display:none"></audio>
+
+  <script src="js/story-data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
