@@ -28,7 +28,7 @@
 ### 🛠️ 技术栈
 
 - 纯原生 HTML + CSS + JavaScript，无构建步骤
-- 参考 [jade-rabbit](https://github.com/user/jade-rabbit) 的 UX 模式
+- 原生设计，无构建步骤
 - Edge TTS 生成音频（edge-tts）
 - Cloudflare Workers AI（FLUX）生成插图
 
@@ -46,7 +46,7 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/<你的用户名>/hua-mulan.git
+git clone https://github.com/PimplesOnNose/hua-mulan.git
 cd hua-mulan
 
 # 使用任意静态服务器，例如 Python
@@ -103,7 +103,7 @@ MIT License — 详见 [LICENSE](LICENSE) 文件。
 ### 🛠️ Tech Stack
 
 - Vanilla HTML + CSS + JavaScript — no build step required
-- UX pattern inspired by [jade-rabbit](https://github.com/user/jade-rabbit)
+- Vanilla HTML + CSS + JavaScript — no build step required
 - Audio generated with Edge TTS
 - Images generated with Cloudflare Workers AI (FLUX)
 
@@ -120,7 +120,7 @@ MIT License — 详见 [LICENSE](LICENSE) 文件。
 ### 🚀 Run Locally
 
 ```bash
-git clone https://github.com/<your-username>/hua-mulan.git
+git clone https://github.com/PimplesOnNose/hua-mulan.git
 cd hua-mulan
 python3 -m http.server 8080
 # Open http://localhost:8080
